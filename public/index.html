@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Carlos</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+    <form id="chat">
+        <input type="text" name="username" placeholder="Digite o usuário"/>
+        <div class="messages"></div>
+        <input type="text" name="message" placeholder="Digite a mensagem"/>
+        <button type="submit">Enviar</button>
+    </form>
+    <script type="text/javascript">
+
+        function renderMessage(message){
+            $('.messages').append("<div class='message'><strong> Autor "+ message.author+" </strong><br/><hr> Mensagem "+ message.message +"</div>")
+        }
+
+        var socket = io("http://localhost:4000");
+
+        $('#chat').submit(function(event){
+            event.preventDefault();
+            const author = $('input[name=username]').val();
+            const message = $('input[name=message]').val();
+            if(author.length && message.length){
+                console.log(author,message)
+                var messageObject = {
+                    author: author,
+                    message:message,
+                };
+                socket.emit('sendMessage', messageObject);
+                renderMessage(messageObject);
+            }
+        });
+    </script>
+</body>
+</html>
