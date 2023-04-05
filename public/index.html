@@ -19,12 +19,15 @@
         <button type="submit">Enviar</button>
     </form>
     <script type="text/javascript">
+        var socket = io("http://localhost:4000");
 
         function renderMessage(message){
             $('.messages').append("<div class='message'><strong> Autor "+ message.author+" </strong><br/><hr> Mensagem "+ message.message +"</div>")
         }
 
-        var socket = io("http://localhost:4000");
+        socket.on('receivedMessage',function(message){
+            renderMessage(message)
+        });
 
         $('#chat').submit(function(event){
             event.preventDefault();

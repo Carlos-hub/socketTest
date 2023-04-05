@@ -19,11 +19,12 @@ app.use('/',(req,res) =>{
 let messages = [];
 
 io.on('connection', socket =>{
-    console.log('socket conectado '+ socket.id)
+    console.log('socket conectado '+ socket.id);
 
     socket.on('sendMessage',data =>{
         console.log(data);
-        messages.push(data)
+        messages.push(data);
+        socket.broadcast.emit('receivedMessage',data);
     });
     console.log(messages);
 });
